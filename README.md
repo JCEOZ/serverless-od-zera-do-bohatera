@@ -2,7 +2,9 @@
 Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serverlesspolska.pl/szkolenie-serverless/)
 
 ## Nawigacja
-- [Środowisko na potrzeby kursu](#środowisko-na-potrzeby-kursu)
+- [Serverless - od zera do bohatera](#serverless---od-zera-do-bohatera)
+  - [Nawigacja](#nawigacja)
+  - [Środowisko na potrzeby kursu](#środowisko-na-potrzeby-kursu)
     - [Maszyna wirtualna](#maszyna-wirtualna)
       - [Konfiguracja VirtualBox](#konfiguracja-virtualbox)
         - [Tworzenie maszyny wirtualnej](#tworzenie-maszyny-wirtualnej)
@@ -16,24 +18,26 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [Instalacja](#instalacja)
       - [Konfiguracja](#konfiguracja)
       - [Skróty](#skróty-1)
+      - [Polecenia](#polecenia)
     - [nvm](#nvm)
       - [Instalacja](#instalacja-1)
-      - [Polecenia](#polecenia)
+      - [Polecenia](#polecenia-1)
     - [Node.js](#nodejs)
       - [Instalacja](#instalacja-2)
-      - [Polecenia](#polecenia-1)
+      - [Polecenia](#polecenia-2)
     - [npm](#npm)
-      - [Polecenie](#polecenie)
+      - [Polecenia](#polecenia-3)
     - [Serverless Framework](#serverless-framework)
       - [Instalacja](#instalacja-3)
-      - [Polecenia](#polecenia-2)
+      - [Polecenia](#polecenia-4)
     - [Visual Studio Code](#visual-studio-code)
       - [Instalacja VSCode](#instalacja-vscode)
-      - [instalacja pluginów](#instalacja-pluginów)
+      - [Instalacja pluginów](#instalacja-pluginów)
+      - [Polecenia](#polecenia-5)
       - [Skróty](#skróty-2)
     - [AWS CLI](#aws-cli)
       - [Instalacja](#instalacja-4)
-      - [Polecenia](#polecenia-3)
+      - [Polecenia](#polecenia-6)
   - [Opis gałęzi kodu](#opis-gałęzi-kodu)
     - [Tydzień 5](#tydzień-5)
       - [Pierwsza funkcja](#pierwsza-funkcja)
@@ -130,7 +134,15 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 - **F12** uruchomienie terminala niezależnie od aplikacji w której jesteśmy
 - **F11** przełączanie trybu pełnoekranowego terminala
 - **Ctrl +/-** dostosowywanie rozmiaru czcionki terminala
-
+#### Polecenia
+- pokazanie wielkości danego folder wraz z podfolderami
+  ```
+  du -h <ścieżka folderu>
+  ```
+- pokazanie listy plików wraz z rozmiarem
+  ```
+  ls -lh
+  ```
 ### nvm
 #### Instalacja
 - w terminalu wykonać polecenia:
@@ -164,12 +176,24 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
 
 ### npm
-#### Polecenie
+#### Polecenia
 - instalacja pakietu:
   ```
   npm install -g <nazwa pakietu>
   ```
   - **-g** instalacja globalna (bez tego przełącznika pakiet byłby zainstalowany w danym folderze)
+- utworzenie pliku konfiguracyjnego dla projektu node.js:
+  ```
+  npm init
+  ```
+- dodanie zależności do projektu:
+  ```
+  npm install <nazwa pakietu>
+  ```
+- usunięcie zależności z projektu:
+  ```
+  npm uninstall <nazwa pakietu>
+  ```
 
 ### Serverless Framework
 #### Instalacja
@@ -184,18 +208,52 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
   sls -v
   ```
-
+- utworzenie nowego projektu (serwisu)
+  ```
+  sls create
+  ```
+  - **-t nazwa szablonu** wskazanie szablonu, który ma być użyty
+  - **-n nazwa serwisu** wskazanie nazwy dla tworzonego serwisu
+- zbudowanie i wrzucenie projektu do chmury
+  ```
+  sls deploy
+  ```
+  - **-f nazwa logiczna funkcji** przebudowanie i wrzucenie do chmury wyłącznie kodu danej funkcji
+- uruchomienie funkcji Lambda
+  ```
+  sls invoke
+  ```
+  - **-f nazwa logiczna funkcji** uruchamia funkcję o podanej nazwie
+  - **-d 'JSON'** podanie JSONa, który będzie przekazany do uruchomionej funkcji w obiekcie event
+- wyświetlenie logów z ostatnich wywołań funkcji Lambda
+  ```
+  sls logs
+  ```
+  - **-f nazwa logiczna funkcji** wyświelta logi związane z podaną funkcją
+- usunięcie całego projektu z chmury
+  ```
+  sls remove
+  ```
+  - **-s nazwa stage'a** możliwość podania stage'a który zostanie usunięty
+- informacje na temat projektu
+  ```
+  sls info
+  ```
+- zbudowanie paczki bez wrzucania do chmury
+  ```
+  sls package
+  ```
 ### Visual Studio Code
 #### Instalacja VSCode
 - poprzez aplikację software
-#### instalacja pluginów
+#### Instalacja pluginów
 - lista pluginów:
   - [JavaScript (ES6) code snippets](https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets)
   - [Serverless Framework Snippets](https://marketplace.visualstudio.com/items?itemName=rafwilinski.serverless-vscode-snippets)
   - [aws-cloudformation-yaml](https://marketplace.visualstudio.com/items?itemName=DanielThielking.aws-cloudformation-yaml)
   - [Jest Snippets](https://marketplace.visualstudio.com/items?itemName=andys8.jest-snippets)
   - [Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)
-  - [Run current test](v)
+  - [Run current test](https://marketplace.visualstudio.com/items?itemName=asvetliakov.run-current-test)
   - [JavaScript Booster](https://marketplace.visualstudio.com/items?itemName=sburg.vscode-javascript-booster)
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - w terminalu wykonać polecenia:
@@ -209,9 +267,16 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   code --install-extension sburg.vscode-javascript-booster
   code --install-extension dbaeumer.vscode-eslint
   ```
+#### Polecenia
+- uruchomienie VSCode w obecnej lokalizacji
+  ```
+  code .
+  ```
 #### Skróty
 - **F11** przełączanie trybu pełnoekranowego aplikacji
-
+- **Ctrl + ~** włącza/wyłącza terminal wbudowany w VSCode
+- **Ctrl + Shift + P** uruchamia okno pozwalające wywołać polecenia z VSCode oraz te udostępnione przez pluginy
+- 
 ### AWS CLI
 #### Instalacja
 - w terminalu wykonać polecenia:
@@ -232,10 +297,10 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 ### Tydzień 5
 #### Pierwsza funkcja
 - Link do gałęzi: [Tydzień 5 - pierwsza funkcja](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien5-pierwsza-funkcja)
-- opis: kod domyślnie wygenerowanej funkcji zaktualizowany o pobranie dwóch liczb z eventu i zwrócenie ich sumy
+- Opis: kod domyślnie wygenerowanej funkcji zaktualizowany o pobranie dwóch liczb z eventu i zwrócenie ich sumy
 #### Przekazanie stanu i cold start
 - Link do gałęzi: [Tydzień 5 - Przekazanie stanu i cold start](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien5-stan-i-coldstart)
-- opis: przykład przekazania stanu między wywołaniami funkcji oraz logowanie informacji czy mieliśmy do czynienia z cold/warm start
+- Opis: przykład przekazania stanu między wywołaniami funkcji oraz logowanie informacji czy mieliśmy do czynienia z cold/warm start
 #### Zadanie domowe
 - Link do gałęzi: [Tydzień 5 - Zadanie domowe](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien5-zadanie-domowe)
-- opis: funkcja wywołująca [Star Wars API](https://swapi.dev/) z użyciem biblioteki [axios](https://github.com/axios/axios)
+- Opis: funkcja wywołująca [Star Wars API](https://swapi.dev/) z użyciem biblioteki [axios](https://github.com/axios/axios)
