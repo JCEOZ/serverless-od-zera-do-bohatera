@@ -1,0 +1,10 @@
+service: tydzien05-hw
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-central-1
+
+functions:
+  swapi:
+    handler: function.handler
