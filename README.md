@@ -194,6 +194,14 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
   npm uninstall <nazwa pakietu>
   ```
+- sprawdzenie używanych paczek npm pod kątem znanych podatności
+  ```
+  npm audit
+  ```
+  - instalacja zalecanych aktualizacji
+    ```
+    npm audit fix
+    ```
 
 ### Serverless Framework
 #### Instalacja
