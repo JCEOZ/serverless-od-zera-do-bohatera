@@ -1,0 +1,1 @@
+GET https://udga486d72.execute-api.eu-central-1.amazonaws.com/dev/hello?param1=p1&param2=p2
