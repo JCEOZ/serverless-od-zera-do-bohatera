@@ -1,0 +1,12 @@
+service: tydzien7-rest-hello
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+
+functions:
+  hello:
+    handler: handler.hello
