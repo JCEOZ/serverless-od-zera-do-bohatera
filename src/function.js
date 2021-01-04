@@ -1,13 +1,18 @@
 module.exports.handler = async event => {
   const queryStringParameters = event.queryStringParameters
 
-  console.log('queryStringParameters', queryStringParameters)
+  console.log('Function hello', queryStringParameters)
+  let name = 'World'
+
+  if (queryStringParameters && queryStringParameters.name) {
+    name = queryStringParameters.name
+  }
+
   return {
     statusCode: 200,
     body: JSON.stringify(
       {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        params: queryStringParameters,
+        message: `Hello ${name}`
       }
     )
   }
