@@ -43,6 +43,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [Pierwsza funkcja](#pierwsza-funkcja)
       - [Przekazanie stanu i cold start](#przekazanie-stanu-i-cold-start)
       - [Zadanie domowe](#zadanie-domowe)
+    - [Tydzień 7](#tydzień-7)
+      - [REST Hello](#rest-hello)
 
 ## Środowisko na potrzeby kursu
 
@@ -142,6 +144,10 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 - pokazanie listy plików wraz z rozmiarem
   ```
   ls -lh
+  ```
+- usunięcie zakomentowanych linii w pliku serverless.yml
+  ```
+  sed -i '/^[[:blank:]]*#/d;s/#.*//' serverless.yml
   ```
 ### nvm
 #### Instalacja
@@ -264,6 +270,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   - [Run current test](https://marketplace.visualstudio.com/items?itemName=asvetliakov.run-current-test)
   - [JavaScript Booster](https://marketplace.visualstudio.com/items?itemName=sburg.vscode-javascript-booster)
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+  - [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 - w terminalu wykonać polecenia:
   ```
   code --install-extension xabikos.JavaScriptSnippets
@@ -274,6 +281,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   code --install-extension asvetliakov.run-current-test
   code --install-extension sburg.vscode-javascript-booster
   code --install-extension dbaeumer.vscode-eslint
+  code --install-extension humao.rest-client
   ```
 #### Polecenia
 - uruchomienie VSCode w obecnej lokalizacji
@@ -284,7 +292,10 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 - **F11** przełączanie trybu pełnoekranowego aplikacji
 - **Ctrl + ~** włącza/wyłącza terminal wbudowany w VSCode
 - **Ctrl + Shift + P** uruchamia okno pozwalające wywołać polecenia z VSCode oraz te udostępnione przez pluginy
-- 
+- **File -> Auto Save** włączenie auto save
+- **Ctrl + B** przełączanie okna eksploratora plików
+- **Ctrl + \\** otwarcie pliku w osobnym oknie (split)
+
 ### AWS CLI
 #### Instalacja
 - w terminalu wykonać polecenia:
@@ -312,3 +323,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### Zadanie domowe
 - Link do gałęzi: [Tydzień 5 - Zadanie domowe](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien5-zadanie-domowe)
 - Opis: funkcja wywołująca [Star Wars API](https://swapi.dev/) z użyciem biblioteki [axios](https://github.com/axios/axios)
+
+### Tydzień 7
+#### REST Hello
+- Link do gałęzi: [Tydzień 7 - REST Hello](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien7-rest-hello)
+- Opis: Projekt generujący prosty endpoint API GateWay, który generuje event dla funkcji Lambda, która wyświetla przekazaną wartość parametru z URL
