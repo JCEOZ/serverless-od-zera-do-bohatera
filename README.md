@@ -290,7 +290,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
 #### Skróty
 - **F11** przełączanie trybu pełnoekranowego aplikacji
-- **Ctrl + ~** włącza/wyłącza terminal wbudowany w VSCode
+- **Ctrl + \~** włącza/wyłącza terminal wbudowany w VSCode
 - **Ctrl + Shift + P** uruchamia okno pozwalające wywołać polecenia z VSCode oraz te udostępnione przez pluginy
 - **File -> Auto Save** włączenie auto save
 - **Ctrl + B** przełączanie okna eksploratora plików
