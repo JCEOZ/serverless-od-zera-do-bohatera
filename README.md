@@ -1,6 +1,6 @@
 # Tydzień 7 - REST hello
-
-## Polecenia
+Projekt generujący prosty endpoint API GateWay, który generuje event dla funkcji Lambda, która wyświetla przekazaną wartość parametru z URL
+## Używane polecenia
 ```
 sls create -t aws-nodejs -n tydzien7-rest-hello
 sed -i '/^[[:blank:]]*#/d;s/#.*//' serverless.yml
