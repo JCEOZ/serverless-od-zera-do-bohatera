@@ -9,7 +9,7 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: src/function.handler
     events:
       - http:
           path: hello
