@@ -4,6 +4,11 @@
 ```
 sls create -t aws-nodejs -n tydzien7-rest-hello
 sed -i '/^[[:blank:]]*#/d;s/#.*//' serverless.yml
+sls deploy
+sudo apt install curl
+sudo snap install jq
+curl URL|jq
+curl URL?param1=p1\&param2=p2|jq
 ```
 ## Skróty
 - VSCode
