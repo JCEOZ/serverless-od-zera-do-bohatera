@@ -9,5 +9,16 @@ provider:
   region: eu-central-1
 
 functions:
-  hello:
-    handler: src/function.hello
+  getAll:
+    handler: src/function.getAll
+    events:
+      - http:
+          path: products
+          method: GET
+        
+  create:
+    handler: src/function.create
+    events:
+      - http:
+          path: products
+          method: POST
