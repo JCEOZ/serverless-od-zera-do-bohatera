@@ -1,0 +1,15 @@
+@host = http://localhost:3000/dev
+
+####
+# getAll - local
+GET {{host}}/products
+
+####
+# create - local
+POST {{host}}/products
+Content-Type: application/json
+
+{
+    "itemName": "wiadro",
+    "itemDescription": "Można w nim trzymać wodę lub pliki"
+}

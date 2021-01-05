@@ -8,6 +8,8 @@ sls create -t aws-nodejs -n tydzien07-rest-dynamodb
 sed -i '/^[[:blank:]]*#/d;s/#.*//' serverless.yml
 npm init
 npm i -D eslint eslint-config-airbnb-base
+npm i -D serverless-offline
+sls offline start
 ```
 
 ## npm
