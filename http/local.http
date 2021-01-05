@@ -13,3 +13,21 @@ Content-Type: application/json
     "itemName": "wiadro",
     "itemDescription": "Można w nim trzymać wodę lub pliki"
 }
+
+####
+# getById - local
+GET {{host}}/products/jakiesId
+
+####
+# update - local
+PUT {{host}}/products/jakiesId
+Content-Type: application/json
+
+{
+    "itemName": "wiadro",
+    "itemDescription": "Można w nim trzymać wodę lub pliki"
+}
+
+####
+# delete - local
+DELETE {{host}}/products/jakiesId
