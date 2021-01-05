@@ -1,0 +1,23 @@
+{
+  "name": "tydzien7-rest-dynamodb",
+  "version": "1.0.0",
+  "description": "Projekt REST API CRUD wykorzystujący DynamoDB do przechowywania danych",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JCEOZ/serverless-od-zera-do-bohatera.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JCEOZ/serverless-od-zera-do-bohatera/issues"
+  },
+  "homepage": "https://github.com/JCEOZ/serverless-od-zera-do-bohatera#readme",
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-airbnb-base": "^14.2.1"
+  }
+}
