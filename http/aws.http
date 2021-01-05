@@ -1,0 +1,33 @@
+@host = https://5wm2aurc88.execute-api.eu-central-1.amazonaws.com/dev
+
+####
+# getAll
+GET {{host}}/products
+
+####
+# create
+POST {{host}}/products
+Content-Type: application/json
+
+{
+    "itemName": "wiadro",
+    "itemDescription": "Można w nim trzymać wodę lub pliki"
+}
+
+####
+# getById
+GET {{host}}/products/jakiesId
+
+####
+# update
+PUT {{host}}/products/jakiesId
+Content-Type: application/json
+
+{
+    "itemName": "wiadro",
+    "itemDescription": "Można w nim trzymać wodę lub pliki"
+}
+
+####
+# delete
+DELETE {{host}}/products/jakiesId
