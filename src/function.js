@@ -1,4 +1,4 @@
-module.exports.getAll = async event => {
+module.exports.getAll = async (event) => {
   console.log('getAll');
 
   return returnOnSuccess({
@@ -7,7 +7,7 @@ module.exports.getAll = async event => {
   })
 }
 
-module.exports.create = async event => {
+module.exports.create = async (event) => {
   console.log('create');
 
   const body = JSON.parse(event.body)
@@ -20,7 +20,7 @@ module.exports.create = async event => {
   })
 }
 
-module.exports.getById = async event => {
+module.exports.getById = async (event) => {
   console.log('getById');
 
   const itemId = event.pathParameters.id
@@ -33,7 +33,7 @@ module.exports.getById = async event => {
   })
 }
 
-module.exports.update = async event => {
+module.exports.update = async (event) => {
   console.log('update');
 
   const itemId = event.pathParameters.id
@@ -48,7 +48,7 @@ module.exports.update = async event => {
   })
 }
 
-module.exports.delete = async event => {
+module.exports.delete = async (event) => {
   console.log('delete');
 
   const itemId = event.pathParameters.id
@@ -61,9 +61,7 @@ module.exports.delete = async event => {
   })
 }
 
-const returnOnSuccess = body => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(body)
-  }
-}
+const returnOnSuccess = (body) => ({
+  statusCode: 200,
+  body: JSON.stringify(body)
+})

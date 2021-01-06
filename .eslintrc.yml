@@ -6,4 +6,12 @@ extends:
   - airbnb-base
 parserOptions:
   ecmaVersion: 12
-rules: {}
+rules: 
+  semi: off
+  line-break-style: off
+  linebreak-style: off
+  no-use-before-define: off
+  import/prefer-default-export: off
+  comma-dangle: off
+  no-console: off
+  import/no-extraneous-dependencies: off
