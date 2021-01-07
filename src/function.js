@@ -1,9 +1,14 @@
-module.exports.getAll = async (event) => {
+const persistance = require('./persistance')
+const dbAdapterDynamoDb = require('./dbAdapterDynamoDb')
+
+module.exports.getAll = async () => {
   console.log('getAll');
+
+  const results = await persistance.getAll(dbAdapterDynamoDb)
 
   return returnOnSuccess({
     functionName: 'getAll',
-    event
+    results
   })
 }
 

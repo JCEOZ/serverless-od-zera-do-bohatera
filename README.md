@@ -11,6 +11,7 @@ npm i -D eslint eslint-config-airbnb-base
 npm i -D serverless-offline
 sls offline start
 sls deploy
+npm i -D aws-sdk
 ```
 
 ## npm
