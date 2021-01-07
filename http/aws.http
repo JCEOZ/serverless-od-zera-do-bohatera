@@ -10,8 +10,8 @@ POST {{host}}/products
 Content-Type: application/json
 
 {
-    "itemName": "wiadro",
-    "itemDescription": "Można w nim trzymać wodę lub pliki"
+    "name": "wiadro",
+    "description": "Można w nim trzymać wodę lub pliki"
 }
 
 ####
@@ -20,12 +20,12 @@ GET {{host}}/products/jakiesId
 
 ####
 # update
-PUT {{host}}/products/jakiesId
+PUT {{host}}/products/b96e5ef7-0b22-4ec8-9301-5abdaad57068
 Content-Type: application/json
 
 {
-    "itemName": "wiadro",
-    "itemDescription": "Można w nim trzymać wodę lub pliki"
+    "name": "nowe wiadro",
+    "description": "nowy opis Można w nim trzymać wodę lub pliki"
 }
 
 ####

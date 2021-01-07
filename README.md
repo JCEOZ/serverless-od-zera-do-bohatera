@@ -12,6 +12,7 @@ npm i -D serverless-offline
 sls offline start
 sls deploy
 npm i -D aws-sdk
+npm i uuid
 ```
 
 ## npm

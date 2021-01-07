@@ -18,10 +18,11 @@ module.exports.create = async (event) => {
   const body = JSON.parse(event.body)
   console.log(body);
 
+  const results = await persistance.create(dbAdapterDynamoDb, body)
+
   return returnOnSuccess({
     functionName: 'create',
-    body,
-    event
+    results
   })
 }
 
@@ -45,11 +46,11 @@ module.exports.update = async (event) => {
   const body = JSON.parse(event.body)
   console.log(`itemId=${itemId}`)
 
+  const results = await persistance.update(dbAdapterDynamoDb, itemId, body)
+
   return returnOnSuccess({
     functionName: 'update',
-    itemId,
-    body,
-    event
+    results
   })
 }
 
