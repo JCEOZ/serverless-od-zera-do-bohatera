@@ -1,23 +1,8 @@
-# Tydzień 7 - REST DynamoDB
+# Tydzień 8 - REST VPC
 
-Projekt REST API CRUD wykorzystujący DynamoDB do przechowywania danych
+Projekt REST API CRUD wykorzystujący RDS do przechowywania danych
 
 ## Używane polecenia
 ```
-sls create -t aws-nodejs -n tydzien07-rest-dynamodb
-sed -i '/^[[:blank:]]*#/d;s/#.*//' serverless.yml
-npm init
-npm i -D eslint eslint-config-airbnb-base
-npm i -D serverless-offline
-sls offline start
-sls deploy
-npm i -D aws-sdk
-npm i uuid
+aws dynamodb list-tables --region eu-central-1
 ```
-
-## npm
-- instalacja modułów
-  ```
-  npm i nazwa_modułu
-  ```
-  - **-D** tryb developerski (moduły będą używane przy developmencie ale nie zostaną wysłane do AWS)

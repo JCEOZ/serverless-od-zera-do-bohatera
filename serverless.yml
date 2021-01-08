@@ -1,4 +1,4 @@
-service: tydzien07-rest-dynamodb
+service: tydzien8-rest-vpc
 
 plugins:
   - serverless-offline

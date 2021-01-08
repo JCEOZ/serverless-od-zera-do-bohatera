@@ -1,7 +1,7 @@
 {
-  "name": "tydzien7-rest-dynamodb",
+  "name": "tydzien8-rest-vpc",
   "version": "1.0.0",
-  "description": "Projekt REST API CRUD wykorzystujący DynamoDB do przechowywania danych",
+  "description": "Projekt REST API CRUD wykorzystujący RDS do przechowywania danych",
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

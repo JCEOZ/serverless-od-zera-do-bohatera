@@ -32,10 +32,11 @@ module.exports.getById = async (event) => {
   const itemId = event.pathParameters.id
   console.log(`itemId=${itemId}`);
 
+  const results = await persistance.getById(dbAdapterDynamoDb, itemId)
+
   return returnOnSuccess({
     functionName: 'getById',
-    itemId,
-    event
+    results
   })
 }
 
@@ -60,10 +61,11 @@ module.exports.delete = async (event) => {
   const itemId = event.pathParameters.id
   console.log(`itemId=${itemId}`);
 
+  const results = await persistance.remove(dbAdapterDynamoDb, itemId)
+
   return returnOnSuccess({
     functionName: 'delete',
-    itemId,
-    event
+    results
   })
 }
 
