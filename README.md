@@ -45,6 +45,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [Zadanie domowe](#zadanie-domowe)
     - [Tydzień 7](#tydzień-7)
       - [REST Hello](#rest-hello)
+      - [REST DynamoDB](#rest-dynamodb)
 
 ## Środowisko na potrzeby kursu
 
@@ -196,6 +197,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
   npm install <nazwa pakietu>
   ```
+  - **-D** instalacja pakietu w trybie developerskim (pakiety będą używane przy developmencie ale nie zostaną umieszczone w paczce do AWS)
 - usunięcie zależności z projektu:
   ```
   npm uninstall <nazwa pakietu>
@@ -256,6 +258,10 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 - zbudowanie paczki bez wrzucania do chmury
   ```
   sls package
+  ```
+- uruchomienie lokalnego serwera z mockiem enpointów API GateWay (wymaga zainstalowanego i skonfigurowanego, wpisem w serverless.yml, pakietu serverless-offline)
+  ```
+  sls offline start
   ```
 ### Visual Studio Code
 #### Instalacja VSCode
@@ -328,3 +334,6 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### REST Hello
 - Link do gałęzi: [Tydzień 7 - REST Hello](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien7-rest-hello)
 - Opis: Projekt generujący prosty endpoint API GateWay, który generuje event dla funkcji Lambda, która wyświetla przekazaną wartość parametru z URL
+#### REST DynamoDB
+- Link do gałęzi: [Tydzień 7 - REST DynamoDB](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien7-rest-dynamodb)
+- Opis: Projekt API REST, które realizuje operacje CRUD na bazie DynamoDB.
