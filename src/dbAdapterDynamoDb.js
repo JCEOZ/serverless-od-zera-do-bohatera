@@ -12,7 +12,19 @@ const getAll = async () => {
   return results.Items.map(convert)
 }
 
-const getById = async (id) => {}
+const getById = async (id) => {
+  const params = {
+    TableName,
+    Key: {
+      id: {
+        S: id
+      }
+    }
+  }
+  const dbClient = new DynamoDB()
+  const results = await dbClient.getItem(params).promise()
+  return convert(results.Item)
+}
 
 const create = async (body) => {
   const params = {
@@ -53,7 +65,19 @@ const update = async (id, body) => {
   return 'update completed'
 }
 
-const remove = async (id) => {}
+const remove = async (id) => {
+  const params = {
+    TableName,
+    Key: {
+      id: {
+        S: id
+      }
+    }
+  }
+  const dbClient = new DynamoDB()
+  await dbClient.deleteItem(params).promise()
+  return 'delete completed'
+}
 
 const convert = (item) => ({
   id: item.id && item.id.S,

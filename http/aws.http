@@ -1,4 +1,4 @@
-@host = https://lo2sbyy7vd.execute-api.eu-central-1.amazonaws.com/dev
+@host = https://19lnbmmvfi.execute-api.eu-central-1.amazonaws.com/dev
 
 ####
 # getAll
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ####
 # getById
-GET {{host}}/products/jakiesId
+GET {{host}}/products/b6d16abb-7b1c-4e1c-ac94-e42890c26f05
 
 ####
 # update
@@ -30,4 +30,4 @@ Content-Type: application/json
 
 ####
 # delete
-DELETE {{host}}/products/jakiesId
+DELETE {{host}}/products/b6d16abb-7b1c-4e1c-ac94-e42890c26f05
