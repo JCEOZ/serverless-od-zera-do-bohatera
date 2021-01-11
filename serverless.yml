@@ -8,8 +8,10 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: nodejs12.x
+  stage: dev
   lambdaHashingVersion: 20201221
-  region: eu-central-1
+  region: ${self:custom.myRegion.${self:custom.myStage}}
+  profile: ${self:custom.myProfile.${self:custom.myStage}}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -19,7 +21,19 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:eu-central-1:*:table/tydzien07"
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.dynamoTableName}"
+
+custom:
+  myStage: ${opt:stage, self:provider.stage}
+  myRegion:
+    dev: eu-central-1
+    test: eu-central-1
+    prod: eu-west-1
+  myProfile:
+    dev: default
+    test: default
+    prod: default
+  dynamoTableName: ${self:service}-${self:custom.myStage}
 
 functions:
   getAll:
@@ -71,4 +85,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
-        TableName: tydzien07
+        TableName: ${self:custom.dynamoTableName}
