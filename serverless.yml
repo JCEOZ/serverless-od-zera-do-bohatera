@@ -12,6 +12,8 @@ provider:
   lambdaHashingVersion: 20201221
   region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
   profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  environment:
+    dynamoTableName: ${self:custom.dynamoTableName}
   iamRoleStatements:
     - Effect: Allow
       Action:

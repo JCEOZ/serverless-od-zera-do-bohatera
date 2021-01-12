@@ -1,7 +1,7 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
 const { v4: uuidv4 } = require('uuid');
 
-const TableName = 'tydzien07'
+const TableName = process.env.dynamoTableName
 
 const getAll = async () => {
   const params = {
