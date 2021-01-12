@@ -27,6 +27,12 @@ custom:
   deployment: ${file(config/deployment.yml):deployment}
   dynamoTableName: ${self:service}-${self:custom.deployment.myStage}
 
+package:
+  exclude:
+    - http/**
+    - config/**
+    - '*'
+
 functions:
   getAll:
     handler: src/function.getAll
