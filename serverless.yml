@@ -10,8 +10,8 @@ provider:
   runtime: nodejs12.x
   stage: dev
   lambdaHashingVersion: 20201221
-  region: ${self:custom.myRegion.${self:custom.myStage}}
-  profile: ${self:custom.myProfile.${self:custom.myStage}}
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,10 +24,8 @@ provider:
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.dynamoTableName}"
 
 custom:
-  myStage: ${file(config/deployment.yml):myStage}
-  myRegion: ${file(config/deployment.yml):myRegion}
-  myProfile: ${file(config/deployment.yml):myProfile}
-  dynamoTableName: ${self:service}-${self:custom.myStage}
+  deployment: ${file(config/deployment.yml):deployment}
+  dynamoTableName: ${self:service}-${self:custom.deployment.myStage}
 
 functions:
   getAll:
