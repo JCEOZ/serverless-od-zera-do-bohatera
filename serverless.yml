@@ -24,15 +24,9 @@ provider:
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.dynamoTableName}"
 
 custom:
-  myStage: ${opt:stage, self:provider.stage}
-  myRegion:
-    dev: eu-central-1
-    test: eu-central-1
-    prod: eu-west-1
-  myProfile:
-    dev: default
-    test: default
-    prod: default
+  myStage: ${file(config/deployment.yml):myStage}
+  myRegion: ${file(config/deployment.yml):myRegion}
+  myProfile: ${file(config/deployment.yml):myProfile}
   dynamoTableName: ${self:service}-${self:custom.myStage}
 
 functions:
