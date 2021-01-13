@@ -1,10 +1,10 @@
 const persistance = require('./persistance')
-const dbAdapterDynamoDb = require('./dbAdapterDynamoDb')
+const adapter = require('./dbAdapterRds')
 
 module.exports.getAll = async () => {
   console.log('getAll');
 
-  const results = await persistance.getAll(dbAdapterDynamoDb)
+  const results = await persistance.getAll(adapter)
 
   return returnOnSuccess({
     functionName: 'getAll',
@@ -18,7 +18,7 @@ module.exports.create = async (event) => {
   const body = JSON.parse(event.body)
   console.log(body);
 
-  const results = await persistance.create(dbAdapterDynamoDb, body)
+  const results = await persistance.create(adapter, body)
 
   return returnOnSuccess({
     functionName: 'create',
@@ -32,7 +32,7 @@ module.exports.getById = async (event) => {
   const itemId = event.pathParameters.id
   console.log(`itemId=${itemId}`);
 
-  const results = await persistance.getById(dbAdapterDynamoDb, itemId)
+  const results = await persistance.getById(adapter, itemId)
 
   return returnOnSuccess({
     functionName: 'getById',
@@ -47,7 +47,7 @@ module.exports.update = async (event) => {
   const body = JSON.parse(event.body)
   console.log(`itemId=${itemId}`)
 
-  const results = await persistance.update(dbAdapterDynamoDb, itemId, body)
+  const results = await persistance.update(adapter, itemId, body)
 
   return returnOnSuccess({
     functionName: 'update',
@@ -61,7 +61,7 @@ module.exports.delete = async (event) => {
   const itemId = event.pathParameters.id
   console.log(`itemId=${itemId}`);
 
-  const results = await persistance.remove(dbAdapterDynamoDb, itemId)
+  const results = await persistance.remove(adapter, itemId)
 
   return returnOnSuccess({
     functionName: 'delete',

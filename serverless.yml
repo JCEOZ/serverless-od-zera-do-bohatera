@@ -14,12 +14,19 @@ provider:
   profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
   environment:
     dynamoTableName: ${self:custom.dynamoTableName}
+    SECRET_NAME: ${self:custom.rds.credentialsSecretName}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - secretsmanager:GetSecretValue
       Resource:
         - !Ref RDSCredentials
+  vpc:
+    securityGroupId:
+      - !Ref LambdaSecurityGroup
+    subnetIds:
+      - !Ref SubnetAPrivate
+      - !Ref SubnetBPrivate
 
 custom:
   deployment: ${file(config/deployment.yml):deployment}
@@ -41,14 +48,6 @@ functions:
     description: Creates tables in DB
     memorySize: 128
     timeout: 10
-    environment:
-      SECRET_NAME: ${self:custom.rds.credentialsSecretName}
-    vpc:
-      securityGroupId:
-        - !Ref LambdaSecurityGroup
-      subnetIds:
-        - !Ref SubnetAPrivate
-        - !Ref SubnetBPrivate
 
   getAll:
     handler: src/function.getAll
