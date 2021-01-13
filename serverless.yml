@@ -20,7 +20,7 @@ provider:
         - secretsmanager:GetSecretValue
       Resource:
         - !Ref RDSCredentials
-        
+
 custom:
   deployment: ${file(config/deployment.yml):deployment}
   dynamoTableName: ${self:service}-${self:custom.deployment.myStage}
@@ -36,6 +36,20 @@ package:
     - '*'
 
 functions:
+  createSchema:
+    handler: src/createSchema/function.handler
+    description: Creates tables in DB
+    memorySize: 128
+    timeout: 10
+    environment:
+      SECRET_NAME: ${self:custom.rds.credentialsSecretName}
+    vpc:
+      securityGroupId:
+        - !Ref LambdaSecurityGroup
+      subnetIds:
+        - !Ref SubnetAPrivate
+        - !Ref SubnetBPrivate
+
   getAll:
     handler: src/function.getAll
     events:

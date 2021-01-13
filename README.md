@@ -10,4 +10,7 @@ sls remove -s prod
 sls deploy -s test -v
 sls info
 sls remove -s test -v
+npm i promise-mysql
+npm i
+sls invoke -f createSchema
 ```
