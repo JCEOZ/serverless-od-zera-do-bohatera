@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ####
 # getById
-GET {{host}}/products/b6d16abb-7b1c-4e1c-ac94-e42890c26f05
+GET {{host}}/products/1
 
 ####
 # update

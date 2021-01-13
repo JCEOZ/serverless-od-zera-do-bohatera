@@ -16,7 +16,15 @@ const getAll = async () => {
   }
 }
 
-const getById = async (id) => { }
+const getById = async (id) => { 
+  try {
+    const result = await (await getConnection()).query(`SELECT * FROM Products WHERE id=${id};`) // FIXME sql injection
+    return result
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
 const create = async (body) => { }
 
