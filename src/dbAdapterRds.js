@@ -39,6 +39,7 @@ const getConnection = async () => {
   }
 
   const secretValue = await getSecret(secretsManager, secretName)
+  console.log(secretValue);
   const { host, port, dbname, username, password } = JSON.parse(secretValue.SecretString)
   CONNECTION = await mysql.createConnection({
     host,
@@ -47,6 +48,7 @@ const getConnection = async () => {
     user: username,
     password
   })
+  console.log(CONNECTION)
   return CONNECTION
 }
 
