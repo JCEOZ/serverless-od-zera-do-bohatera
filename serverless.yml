@@ -280,3 +280,30 @@ resources:
         Tags:
           - Key: Name
             Value: ${self:service}-${self:custom.deployment.myStage}-mysql-db-instance
+            
+# IAM roles
+
+    CreateSchemaLambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: createSchema-lambda-role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        Policies:
+          - PolicyName: createSchema-lambda-policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - secretsmanager:GetSecretValue
+                  Resource:
+                    - !Ref RDSCredentials
