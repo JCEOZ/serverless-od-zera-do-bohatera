@@ -26,11 +26,35 @@ const getById = async (id) => {
   }
 }
 
-const create = async (body) => { }
+const create = async (body) => {
+  try {
+    const result = await (await getConnection()).query(`INSERT INTO Products (name, description) VALUES ('${body.name}', '${body.description}');`)
+    return result
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
-const update = async (id, body) => { }
+const update = async (id, body) => {
+  try {
+    const result = await (await getConnection()).query(`UPDATE Products SET name = '${body.name}', description = '${body.description}' WHERE id = ${id};`)
+    return result
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
-const remove = async (id) => { }
+const remove = async (id) => {
+  try {
+    const result = await (await getConnection()).query(`DELETE FROM Products WHERE id = ${id};`)
+    return result
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
 const getConnection = async () => {
   if (CONNECTION) {

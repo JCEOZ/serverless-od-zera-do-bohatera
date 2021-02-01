@@ -20,7 +20,7 @@ GET {{host}}/products/1
 
 ####
 # update
-PUT {{host}}/products/b96e5ef7-0b22-4ec8-9301-5abdaad57068
+PUT {{host}}/products/1
 Content-Type: application/json
 
 {
@@ -30,4 +30,4 @@ Content-Type: application/json
 
 ####
 # delete
-DELETE {{host}}/products/b6d16abb-7b1c-4e1c-ac94-e42890c26f05
+DELETE {{host}}/products/1
