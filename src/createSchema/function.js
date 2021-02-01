@@ -4,12 +4,12 @@ const mysql = require('promise-mysql')
 module.exports.handler = async () => {
   const secretsManager = new AWS.SecretsManager()
   const secretName = process.env.SECRET_NAME
-  console.log(secretName);
+
   let result
 
   try {
     const secretValue = await getSecret(secretsManager, secretName)
-    console.log(secretValue);
+
     // eslint-disable-next-line object-curly-newline
     const { host, port, dbname, username, password } = JSON.parse(secretValue.SecretString)
     const connection = await mysql.createConnection({
@@ -19,7 +19,7 @@ module.exports.handler = async () => {
       user: username,
       password
     })
-    console.log(connection);
+
     await connection.query(`
       CREATE TABLE IF NOT EXISTS Products (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
