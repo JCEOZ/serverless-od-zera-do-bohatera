@@ -22,7 +22,7 @@ provider:
       Resource:
         - !Ref RDSCredentials
   vpc:
-    securityGroupId:
+    securityGroupIds:
       - !Ref LambdaSecurityGroup
     subnetIds:
       - !Ref SubnetAPrivate
