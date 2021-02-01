@@ -38,6 +38,9 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
     - [AWS CLI](#aws-cli)
       - [Instalacja](#instalacja-4)
       - [Polecenia](#polecenia-6)
+    - [Artillery](#artillery)
+      - [Instalacja](#instalacja-5)
+      - [Polecenia](#polecenia-7)
   - [Opis gałęzi kodu](#opis-gałęzi-kodu)
     - [Tydzień 5](#tydzień-5)
       - [Pierwsza funkcja](#pierwsza-funkcja)
@@ -46,6 +49,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
     - [Tydzień 7](#tydzień-7)
       - [REST Hello](#rest-hello)
       - [REST DynamoDB](#rest-dynamodb)
+    - [Tydzień 8](#tydzień-8)
+      - [REST VPC](#rest-vpc)
 
 ## Środowisko na potrzeby kursu
 
@@ -235,6 +240,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   sls deploy
   ```
   - **-f nazwa logiczna funkcji** przebudowanie i wrzucenie do chmury wyłącznie kodu danej funkcji
+  - **-s nazwa stage** deploy aplikacji na wskazany stage
+  - **-v** tryb verbose pokazujący logi tego co się dzieje podczas operacji deploy
 - uruchomienie funkcji Lambda
   ```
   sls invoke
@@ -251,6 +258,7 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   sls remove
   ```
   - **-s nazwa stage'a** możliwość podania stage'a który zostanie usunięty
+  - **-v** tryb verbose pokazujący logi tego co się dzieje podczas operacji deploy
 - informacje na temat projektu
   ```
   sls info
@@ -317,6 +325,24 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
   ```
   aws sts get-caller-identity
   ```
+- sprawdzenie listy tabel DynamoDB w danym regionie
+  ```
+  aws dynamodb list-tables --region eu-central-1
+  ```
+
+### Artillery
+#### Instalacja
+- w terminalu wykonać polecenia:
+  ```
+  npm i -g artillery
+  ```
+#### Polecenia
+- uruchomienie szybkiego testu wydajnościowego na naszym endpoincie
+  ```
+  artillery quick --count 60 -n 100 <url endpointu do testowania>
+  ```
+  - **--count** liczba wirtualnych użytkowników
+  - **-n** liczba zapytań do wykonania przez każdego użytkownika wirtualnego
 
 ## Opis gałęzi kodu
 ### Tydzień 5
@@ -337,3 +363,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### REST DynamoDB
 - Link do gałęzi: [Tydzień 7 - REST DynamoDB](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien7-rest-dynamodb)
 - Opis: Projekt API REST, które realizuje operacje CRUD na bazie DynamoDB.
+
+### Tydzień 8
+#### REST VPC
+- Link do gałęzi: [Tydzień 8 - REST VPC](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien8-rest-vpc)
+- Opis: Projekt REST API CRUD wykorzystujący RDS do przechowywania danych
