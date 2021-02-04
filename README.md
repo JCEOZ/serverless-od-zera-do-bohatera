@@ -6,4 +6,6 @@ Projekt Single Page Application
 ```
 npm i
 npm run start
+sls deploy
+ustawienie nazwy domeny, ręcznie w konsoli AWS w serwisie Congito -> nasz user pool -> App Integration -> Domain name
 ```
