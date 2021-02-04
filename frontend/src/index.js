@@ -4,7 +4,7 @@ import './index.css';
 import App from './App'; 
 import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css'
-import Amplify from 'aws-aplify'
+import Amplify from 'aws-amplify'
 import config from './config'
 
 // TODO LEKCJA 09-05 Połączenie frontendu i backendu ze sobą
