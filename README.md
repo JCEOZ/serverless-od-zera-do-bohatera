@@ -4,5 +4,6 @@ Projekt Single Page Application
 
 ## Używane polecenia
 ```
-
+npm i
+npm run start
 ```
