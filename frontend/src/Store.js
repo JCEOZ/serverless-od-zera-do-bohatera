@@ -1,4 +1,5 @@
 import React from "react";
+import { Auth } from 'aws-amplify'
 
 export const getInitialState = () => {
   const localState = localStorage.getItem('state')
@@ -13,6 +14,8 @@ const performLogout = () => {
   console.log('Logging out...');
   
   // cognito code goes here
+  Auth.signOut().then(() => console.log('logged out [promise resolved'))
+  .catch(error => console.log(error))
 
   localStorage.removeItem('state');
   return initialState;
