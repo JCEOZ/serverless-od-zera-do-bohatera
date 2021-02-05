@@ -3,6 +3,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui
 import logo from '../../logo.png'
 import { Context } from "../../Store";
 import history from '../../history'
+import { Auth } from 'aws-amplify'
 
 const LoginForm = () => {
   
@@ -10,11 +11,14 @@ const LoginForm = () => {
   const handleSubmit = async () => {
     try {
       // cognito code goes here
+      const user = await Auth.signIn(state.username, state.password)
+      console.log(user)
+
       console.log('dispatching event');
       dispatch({
         type: "login",
-        tokens: {},
-        attributes: {}
+        tokens: user.signInUserSession,
+        attributes: user.attributes
       })
       history.push('/welcome')
     } catch (error) {
