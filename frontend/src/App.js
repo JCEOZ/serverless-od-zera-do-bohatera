@@ -5,6 +5,7 @@ import './App.css';
 
 import Home from './components/Home';
 import Products from './components/Products';
+import Product from './components/Product';
 import Welcome from './components/auth/Welcome';
 import Footer from './components/Footer';
 import FixedMenu from './components/FixedMenu';
