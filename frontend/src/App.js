@@ -27,6 +27,7 @@ import history from "./history";
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/products" component={Products} />
+              <Route exact path="/product/:id" component={Product} />
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/register" component={RegisterForm} />
               <Route exact path="/registered" component={Registered} />
