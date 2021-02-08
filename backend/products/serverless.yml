@@ -37,6 +37,8 @@ functions:
       - http:
           path: products
           method: POST
+          cors: true
+          authorizer: aws_iam
   
   createComment:
     handler: src/comments/function.createComment
@@ -45,6 +47,7 @@ functions:
           path: products/{id}
           method: POST
           cors: true
+          authorizer: aws_iam
 
   getProductById:
     handler: src/products/function.getProductById
@@ -59,6 +62,8 @@ functions:
       - http:
           path: products/{id}/comments
           method: GET
+          cors: true
+          authorizer: aws_iam
 
   updateProduct:
     handler: src/products/function.updateProduct
@@ -66,6 +71,8 @@ functions:
       - http:
           path: products/{id}
           method: PUT
+          cors: true
+          authorizer: aws_iam
   
   deleteProduct:
     handler: src/products/function.deleteProduct
@@ -73,6 +80,8 @@ functions:
       - http:
           path: products/{id}
           method: DELETE
+          cors: true
+          authorizer: aws_iam
 
 resources:
   Resources:

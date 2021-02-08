@@ -3,6 +3,8 @@ import { Button, Comment, Container, Form, Header, Icon, Item } from 'semantic-u
 import React from 'react'
 import axios from "axios";
 
+import { API } from "aws-amplify"
+
 import { Context } from "../Store";
 const config = require('../config.json');
 
@@ -28,8 +30,8 @@ export default function Product(props) {
     const fetchComments = async () => {
       try {
         console.log('Starting getting comments...');
-        const response = await axios.get(`${config.api.productsUrl}/${productId}/comments`)
-        const { metadata, data } = response.data
+        const { metadata, data } = await API.get('products', `/products/${productId}/comments`) //axios.get(`${config.api.productsUrl}/${productId}/comments`)
+        
         console.log(`Fetched ${metadata.length} comments`);
         setComments(data)
         setFormValue('')
@@ -64,10 +66,11 @@ export default function Product(props) {
         username: 'user-id',
         userlabel: label
       }
-      const requestConfig = {
-      }
+
       try {
-        await axios.post(`${config.api.productsUrl}/${productId}`, params, requestConfig)
+        await API.post('products', `/products/${productId}`, {
+          body: params
+        })
         setReloadTrigger(new Date())
       } catch (error) {
         console.log(error)

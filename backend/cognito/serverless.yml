@@ -47,16 +47,17 @@ resources:
         UserPoolId:
           Ref: CognitoUserPool
 
+# TODO LEKCJA 10-03
+
     CognitoIdentityPool:
       Type: AWS::Cognito::IdentityPool
+      DeletionPolicy: Delete
       Properties:
-        IdentityPoolName: ${self:service}-${self:custom.deployment.myStage}-identity-pool
+        IdentityPoolName: app_cognito_${self:custom.deployment.myStage}_identity_pool
         AllowUnauthenticatedIdentities: false
         CognitoIdentityProviders:
-          - ClientId:
-              Ref: CognitoUserPoolClient
-            ProviderName:
-              Fn::GetAtt: [CognitoUserPool, ProviderName]
+          - ClientId: !Ref CognitoUserPoolClient
+            ProviderName: !GetAtt CognitoUserPool.ProviderName
 
     CognitoIdentityPoolRoles:
       Type: AWS::Cognito::IdentityPoolRoleAttachment
@@ -64,10 +65,8 @@ resources:
         IdentityPoolId:
           Ref: CognitoIdentityPool
         Roles:
-          authenticated:
-            Fn::GetAtt: [CognitoAuthRole, Arn]
-          unauthenticated:
-            Fn::GetAtt: [CognitoUnauthRole, Arn]
+          authenticated: !GetAtt CognitoAuthRole.Arn
+          unauthenticated: !GetAtt CognitoUnauthRole.Arn
 
     CognitoAuthRole:
       Type: AWS::IAM::Role
@@ -134,6 +133,7 @@ resources:
                     - "cognito-sync:*"
                     - "cognito-identity:*"
                   Resource: "*"
+  
   Outputs:
     Region:
       Value: ${self:provider.region}
@@ -141,3 +141,5 @@ resources:
       Value: !Ref CognitoUserPool
     AppClientId:
       Value: !Ref CognitoUserPoolClient
+    IdentityPoolId:
+      Value: !Ref CognitoIdentityPool
