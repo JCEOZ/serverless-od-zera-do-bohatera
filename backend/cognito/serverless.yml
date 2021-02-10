@@ -101,7 +101,10 @@ resources:
                 - Effect: "Allow"
                   Action:
                     - "execute-api:Invoke"
-                  Resource: "*"
+                  Resource: 
+                    # "arn:aws:execute-api:region:account-id:api-id/stage/METHOD_HTTP_VERB/Resource-path"
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/GET/*"
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/POST/products/*"
 
     CognitoUnauthRole:
       Type: AWS::IAM::Role
