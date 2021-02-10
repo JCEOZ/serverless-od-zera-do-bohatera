@@ -136,7 +136,54 @@ resources:
                     - "cognito-sync:*"
                     - "cognito-identity:*"
                   Resource: "*"
+
+    CognitoAdminRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:custom.deployment.myStage}-admin-role
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: CognitoIdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": authenticated
+        Policies:
+          - PolicyName: "CognitoAdminPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                    - "cognito-identity:*"
+                  Resource: "*"
+                - Effect: "Allow"
+                  Action:
+                    - "execute-api:Invoke"
+                  
+                  # "arn:aws:execute-api:region:account-id:api-id/stage/METHOD_HTTP_VERB/Resource-path"
+                  Resource: 
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/*/*"
   
+    CognitoPoolAdminGroup:
+      Type: AWS::Cognito::UserPoolGroup
+      Properties: 
+        Description: Admin privledges
+        GroupName: admin
+        Precedence: 0
+        RoleArn: !GetAtt CognitoAdminRole.Arn
+        UserPoolId: !Ref CognitoUserPool
+
   Outputs:
     Region:
       Value: ${self:provider.region}
