@@ -13,6 +13,7 @@ import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
 import Registered from './components/auth/Registered';
 import ProfileForm from './components/auth/ProfileForm';
+import EditProducts from './components/admin/EditProducts'
 
 import { Context, getInitialState, reducer } from "./Store";
 import history from "./history";
@@ -33,6 +34,7 @@ import history from "./history";
               <Route exact path="/register" component={RegisterForm} />
               <Route exact path="/registered" component={Registered} />
               <Route exact path="/profile" component={ProfileForm} />
+              <Route exact path="/editproducts" component={EditProducts} />
               {/* <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/forgotpassword" component={ForgotPassword} />
               <Route exact path="/changepassword" component={ChangePassword} />

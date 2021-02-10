@@ -1,13 +1,13 @@
 {
     "api": {
-        "productsUrl": "https://ot0cpod15h.execute-api.eu-central-1.amazonaws.com/dev/products",
+        "productsUrl": "https://wrom7almi9.execute-api.eu-central-1.amazonaws.com/dev/products",
         "REGION": "eu-central-1",
-        "URL": "https://ot0cpod15h.execute-api.eu-central-1.amazonaws.com/dev"
+        "URL": "https://wrom7almi9.execute-api.eu-central-1.amazonaws.com/dev"
     },
     "cognito": {
         "REGION": "eu-central-1",
-        "USER_POOL_ID": "eu-central-1_Femjdmf9i",
-        "APP_CLIENT_ID": "455almck6lrjaf5vjcjj7j7cra",
-        "IDENTITY_POOL_ID": "eu-central-1:65098995-d7f2-4f2d-a25c-4e8db75c47cc"
+        "USER_POOL_ID": "eu-central-1_S8MjARqJ5",
+        "APP_CLIENT_ID": "4mn49egmjlni8tovkd3e4vrt38",
+        "IDENTITY_POOL_ID": "eu-central-1:2f2f6fcb-6d72-48e0-9d5e-36a99ea2b50d"
     }
 }

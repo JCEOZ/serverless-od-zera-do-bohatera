@@ -43,7 +43,7 @@ export default function FixedMenu() {
         {store.isAuthenticated &&
           <Dropdown item simple text='Admin'>
            <Dropdown.Menu>
-             <Dropdown.Item icon='edit' text='Edycja produktów' />
+             <Dropdown.Item icon='edit' text='Edycja produktów' href='/editproducts' />
              <Dropdown.Item icon='cloud download' text='Importuj plik' />
            </Dropdown.Menu>
          </Dropdown>
