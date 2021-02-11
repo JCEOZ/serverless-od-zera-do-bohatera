@@ -22,6 +22,11 @@ Amplify.configure({
                 name: 'products',
                 endpoint: config.api.URL,
                 region: config.api.REGION
+            },
+            {
+              name: 'signedUrl',
+              endpoint: config.api.SIGNED_URL,
+              region: config.api.REGION
             }
         ]
     }

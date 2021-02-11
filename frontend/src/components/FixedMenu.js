@@ -44,7 +44,7 @@ export default function FixedMenu() {
           <Dropdown item simple text='Admin'>
            <Dropdown.Menu>
              <Dropdown.Item icon='edit' text='Edycja produktów' href='/editproducts' />
-             <Dropdown.Item icon='cloud download' text='Importuj plik' />
+             <Dropdown.Item icon='cloud download' text='Importuj plik' href='/importfile' />
            </Dropdown.Menu>
          </Dropdown>
         }

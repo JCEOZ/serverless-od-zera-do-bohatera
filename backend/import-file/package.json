@@ -1,0 +1,15 @@
+{
+  "name": "import-file",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Pawel Zubkiewicz",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.610.0"
+  }
+}

@@ -2,7 +2,8 @@
     "api": {
         "productsUrl": "https://wrom7almi9.execute-api.eu-central-1.amazonaws.com/dev/products",
         "REGION": "eu-central-1",
-        "URL": "https://wrom7almi9.execute-api.eu-central-1.amazonaws.com/dev"
+        "URL": "https://wrom7almi9.execute-api.eu-central-1.amazonaws.com/dev",
+        "SIGNED_URL": "https://kkrtttg26f.execute-api.eu-central-1.amazonaws.com/dev"
     },
     "cognito": {
         "REGION": "eu-central-1",
