@@ -13,7 +13,7 @@ const businessLogic = async (fileInfo, getFile, postToQueue) => {
 }
 
 const splitFileByItem = (file) => {
-  return []
+  return [{}]
 }
 
 const parseEvent = (event) => {

@@ -32,14 +32,18 @@ describe('Process File', () => {
             expect(category).toBe('Przedmiot')
             expect(description).toBe('Można się okopać i ten sposób zabezpieczyć')
             expect(imageUrl).toBe('https://szkolenie-serverless-obrazki.s3.eu-central-1.amazonaws.com/lopata.jpg')
-            
+
         }
 
+        const postToQueueMock = jest.fn().mockImplementation(postToQueue)
+
         // WHEN
-        const actual = await businessLogic(fileInfo, getFileMock, postToQueue)
+        const actual = await businessLogic(fileInfo, getFileMock, postToQueueMock)
 
         //THEN
         expect(businessLogic).toBeTruthy()
+        expect(postToQueueMock).toHaveBeenCalled()
+        expect(postToQueueMock).toHaveBeenCalledTimes(10)
     });
 });
 
