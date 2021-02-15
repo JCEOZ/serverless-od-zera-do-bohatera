@@ -14,4 +14,6 @@ npm run start
 # Komenda na wypadek wystąpienia problemu z przekroczeniem limity watcher’ów
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 npm i axios
+npm i -D jest @types/jest rewire
+npm test
 ```

@@ -1,6 +1,12 @@
 module.exports.handler = async (event) => {
   const fileInfo = parseEvent(event)
+
+  const result = await businessLogic()
   return fileInfo
+}
+
+const businessLogic = () => {
+  
 }
 
 const parseEvent = (event) => {
