@@ -13,7 +13,14 @@ const businessLogic = async (fileInfo, getFile, postToQueue) => {
 }
 
 const splitFileByItem = (file) => {
-  return [{}]
+  const byLine = /\r?\n/
+  const lineToArray = (line) => line.split(',')
+  const arrayToObject = (array) => {
+    const [name, category, description, imageUrl] = array
+    return {name, category, description, imageUrl}
+  }
+
+  return file.split(byLine).map(lineToArray).map(arrayToObject)
 }
 
 const parseEvent = (event) => {
