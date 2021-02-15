@@ -26,8 +26,17 @@ describe('Process File', () => {
             return file
         }
 
+        const postToQueue = (msg) => {
+            const { name, category, description, imageUrl } = msg
+            expect(name).toBeTruthy()
+            expect(category).toBe('Przedmiot')
+            expect(description).toBe('Można się okopać i ten sposób zabezpieczyć')
+            expect(imageUrl).toBe('https://szkolenie-serverless-obrazki.s3.eu-central-1.amazonaws.com/lopata.jpg')
+            
+        }
+
         // WHEN
-        const actual = await businessLogic(fileInfo, getFileMock)
+        const actual = await businessLogic(fileInfo, getFileMock, postToQueue)
 
         //THEN
         expect(businessLogic).toBeTruthy()

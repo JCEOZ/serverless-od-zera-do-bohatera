@@ -12,6 +12,10 @@ const businessLogic = async (fileInfo, getFile, postToQueue) => {
   return Promise.all(promises)
 }
 
+const splitFileByItem = (file) => {
+  return []
+}
+
 const parseEvent = (event) => {
   console.log(JSON.stringify(event))
   const bucketName = event.Records[0].s3.bucket.name
