@@ -1,12 +1,15 @@
 module.exports.handler = async (event) => {
   const fileInfo = parseEvent(event)
 
-  const result = await businessLogic()
+  const result = await businessLogic(fileInfo)
   return fileInfo
 }
 
-const businessLogic = () => {
-  
+const businessLogic = async (fileInfo, getFile, postToQueue) => {
+  const file = await getFile(fileInfo)
+  const items = splitFileByItem(file)
+  const promises = items.map(postToQueue)
+  return Promise.all(promises)
 }
 
 const parseEvent = (event) => {

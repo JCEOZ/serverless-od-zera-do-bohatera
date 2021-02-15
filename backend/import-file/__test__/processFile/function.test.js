@@ -2,9 +2,19 @@
  * @jest-environment node
  */
 
- describe('Process File', () => {
-     it('should process business logic', () => {
+const rewire = require('rewire');
+
+const lambdaRewired = rewire('../../src/processFile/function')
+
+describe('Process File', async () => {
+    it('should process business logic', () => {
          
-        expect(1).toBe(1)
-     });
- });
+       // GIVEN
+       const businessLogic = lambdaRewired.__get__('businessLogic')
+
+       // WHEN
+
+       //THEN
+       expect(businessLogic).toBeTruthy()
+    });
+});
