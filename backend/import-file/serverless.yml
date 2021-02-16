@@ -9,6 +9,7 @@ provider:
   environment:
     bucketName: ${self:custom.bucketName}
     queueUrl: !Ref QueueProducts
+    productsApiUrl: ${cf:products-${self:custom.deployment.myStage}.ServiceEndpoint}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -20,6 +21,17 @@ provider:
         - sqs:SendMessage
       Resource:
         - !GetAtt QueueProducts.Arn
+    - Effect: Allow
+      Action:
+        - sqs:DeleteMessage
+        - sqs:ReceiveMessage
+      Resource:
+        - !GetAtt QueueProducts.Arn
+    - Effect: "Allow"
+      Action:
+        - "execute-api:Invoke"
+      Resource:
+        - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/POST/products"
 
 custom:
   bucketName: jz-${self:service}-${self:custom.deployment.myStage}-bucket # TODO zmien nazwe bucketa bo musi być unikalna ;-)
@@ -42,6 +54,14 @@ functions:
           bucket: uploads
           rules:
             - suffix: .csv
+
+  save:
+    handler: src/save/function.handler
+    reservedConcurrency: 5
+    events:
+      - sqs:
+          arn: !GetAtt QueueProducts.Arn
+          batchSize: 1
 
 resources:
   Resources:

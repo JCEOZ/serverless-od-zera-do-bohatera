@@ -17,4 +17,6 @@ npm i axios
 npm i -D jest @types/jest rewire
 npm test
 aws s3 cp __test__/__resources/products.csv s3://jz-import-file-dev-bucket/
+npm i aws4
+aws cloudformation --region eu-central-1 describe-stacks --stack-name products-dev --query "Stacks[0].Outputs"
 ```
