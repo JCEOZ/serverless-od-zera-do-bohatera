@@ -1,8 +1,12 @@
+const { getFile } = require('./getFileAdapterS3')
+const { sendMessage } = require('./sendMessageAdapterSqs')
+
 module.exports.handler = async (event) => {
   const fileInfo = parseEvent(event)
 
-  const result = await businessLogic(fileInfo)
-  return fileInfo
+  const postToQueue = sendMessage(process.env.queueUrl)
+  const result = await businessLogic(fileInfo, getFile, postToQueue)
+  return result
 }
 
 const businessLogic = async (fileInfo, getFile, postToQueue) => {

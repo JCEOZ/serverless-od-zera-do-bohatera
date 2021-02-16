@@ -8,11 +8,18 @@ provider:
   endpointType: REGIONAL # configuration for API Gateway
   environment:
     bucketName: ${self:custom.bucketName}
+    queueUrl: !Ref QueueProducts
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:putObject
+        - s3:getObject
       Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - !GetAtt QueueProducts.Arn
 
 custom:
   bucketName: jz-${self:service}-${self:custom.deployment.myStage}-bucket # TODO zmien nazwe bucketa bo musi być unikalna ;-)
@@ -56,6 +63,12 @@ resources:
                 - DELETE
                 - HEAD
               MaxAge: 300
+
+    QueueProducts:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.deployment.myStage}-products
+
     ProcessFileLambdaPermissionUploadsS3:
       Type: 'AWS::Lambda::Permission'
       Properties:

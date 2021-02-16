@@ -16,4 +16,5 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 npm i axios
 npm i -D jest @types/jest rewire
 npm test
+aws s3 cp __test__/__resources/products.csv s3://jz-import-file-dev-bucket/
 ```
