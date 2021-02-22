@@ -8,6 +8,12 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - sns:Publish
+      Resource:
+        - Ref: snsTopic
+        - Ref: snsDlq
+    - Effect: Allow
+      Action:
         - dynamodb:PutItem
         - dynamodb:Scan
       Resource:
@@ -15,6 +21,8 @@ provider:
 custom:
   deployment: ${file(config/deployment.yml):deployment}
   tableName: ${self:service}-${self:custom.deployment.myStage}
+  topicName: ${self:service}-${self:custom.deployment.myStage}
+  dlqName: dlq-${self:service}-${self:custom.deployment.myStage}
 
 functions:
 
@@ -29,6 +37,24 @@ functions:
       tableName: ${self:custom.tableName}
     events:
       - schedule: cron(0 */4 * * ? *)
+
+  fetch:
+    handler: src/fetch/function.handler
+    description: Get job details
+    timeout: 20
+    memorySize: 1600
+    # reservedConcurrency: 10
+    layers:
+      - arn:aws:lambda:eu-central-1:764866452798:layer:chrome-aws-lambda:10
+    environment:
+      topicArn: !Ref snsTopic
+      topicDlq: !Ref snsDlq
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 1
+          startingPosition: LATEST
+          arn: !GetAtt DynamoDbTable.StreamArn
 
 resources:
   Resources:
@@ -48,3 +74,18 @@ resources:
         Tags:
           - Key: Application
             Value: ${self:service}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+    snsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: ${self:custom.topicName}
+        TopicName: ${self:custom.topicName}
+    snsDlq:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: ${self:custom.dlqName}
+        TopicName: ${self:custom.dlqName}
+        Subscription:
+          - Endpoint: pawel@serverlesspolska.pl
+            Protocol: email
