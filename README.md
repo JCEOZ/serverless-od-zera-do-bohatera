@@ -51,6 +51,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [REST DynamoDB](#rest-dynamodb)
     - [Tydzień 8](#tydzień-8)
       - [REST VPC](#rest-vpc)
+    - [Tydzień 9/10](#tydzień-910)
+      - [Single Page Application](#single-page-application)
 
 ## Środowisko na potrzeby kursu
 
@@ -368,3 +370,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### REST VPC
 - Link do gałęzi: [Tydzień 8 - REST VPC](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien8-rest-vpc)
 - Opis: Projekt REST API CRUD wykorzystujący RDS do przechowywania danych
+
+### Tydzień 9/10
+#### Single Page Application
+- Link do gałęzi: [Tydzień 9 - Single Page Application](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien9-single-page-application)
+- Opis: Projekt Single Page Application
