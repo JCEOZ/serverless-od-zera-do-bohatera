@@ -1,0 +1,24 @@
+{
+  "name": "import-file",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Pawel Zubkiewicz",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^25.1.0",
+    "aws-sdk": "^2.610.0",
+    "jest": "^25.1.0",
+    "rewire": "^4.0.1",
+    "serverless-plugin-tracing": "^2.0.0"
+  },
+  "dependencies": {
+    "aws-xray-sdk": "^2.5.0",
+    "aws4": "^1.9.1",
+    "axios": "^0.19.2"
+  }
+}

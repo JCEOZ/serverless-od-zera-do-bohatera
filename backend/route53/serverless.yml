@@ -1,0 +1,53 @@
+service: app-hostedzone
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  
+custom:
+  deployment: ${file(config/deployment.yml):deployment}
+  rootDomainName: serverless.com.pl
+  domain:
+    dev:  dev.${self:custom.rootDomainName}   # dev.serverless.com.pl
+    test: test.${self:custom.rootDomainName}  # test.serverless.com.pl
+    prod: ${self:custom.rootDomainName}       # serverless.com.pl
+
+resources:
+  Conditions:
+    isProdStage:
+      Fn::Equals:
+        - ${self:custom.deployment.myStage}
+        - 'prod'
+    isNotProdStage: !Not [!Condition isProdStage]
+
+  Resources:
+    HostedZone:
+      Type: AWS::Route53::HostedZone
+      Properties:
+        HostedZoneConfig:
+          Comment: Defines the public hosted zone for a stage
+        HostedZoneTags:
+          - Key: Name
+            Value: ${self:provider}-${self:custom.deployment.myStage}
+        Name: ${self:custom.domain.${self:custom.deployment.myStage}}
+
+    WebsiteDomainDelegation:
+      Type: AWS::Route53::RecordSet
+      Condition: isNotProdStage
+      Properties:
+        HostedZoneId: !ImportValue prodHostedZoneId
+        Name: ${self:custom.domain.${self:custom.deployment.myStage}}
+        Type: NS
+        ResourceRecords: !GetAtt HostedZone.NameServers
+        TTL: '300'
+
+
+  Outputs:
+    HostedZoneId:
+      Description: HostedZone ID
+      Value: !Ref HostedZone
+      Export:
+        Name: ${self:custom.deployment.myStage}HostedZoneId

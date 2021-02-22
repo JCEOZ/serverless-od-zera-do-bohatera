@@ -1,0 +1,93 @@
+service: app-website
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  
+custom:
+  deployment: ${file(config/deployment.yml):deployment}
+  rootDomainName: serverless.com.pl
+  domain:
+    dev:  dev.${self:custom.rootDomainName}   # dev.serverless.com.pl
+    test: test.${self:custom.rootDomainName}  # test.serverless.com.pl
+    prod: ${self:custom.rootDomainName}       # serverless.com.pl
+
+resources:
+  Resources:
+    WebsiteBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.domain.${self:custom.deployment.myStage}}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+    
+    WebsiteContentDeliverNetwork:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Comment: CDN for S3-backed website
+          Aliases:
+            - ${self:custom.domain.${self:custom.deployment.myStage}}
+          Enabled: true
+          HttpVersion: http2
+          IPV6Enabled: false
+          PriceClass: PriceClass_100 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-priceclass
+          DefaultCacheBehavior:
+            Compress: true
+            ForwardedValues:
+              QueryString: true
+            MaxTTL: 120
+            MinTTL: 0
+            DefaultTTL: 120
+            TargetOriginId: s3-bucket-origin
+            ViewerProtocolPolicy: redirect-to-https
+          DefaultRootObject: index.html
+          ViewerCertificate:
+            AcmCertificateArn: !Ref WebsiteCertificate
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2018
+          Origins:
+            - CustomOriginConfig:
+                OriginProtocolPolicy: http-only
+              DomainName: !Join
+                - ''
+                - -  ${self:custom.domain.${self:custom.deployment.myStage}}
+                  - .s3-website-
+                  -  ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+                  - .amazonaws.com
+              Id: s3-bucket-origin
+    
+    WebsiteCertificate:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: ${self:custom.domain.${self:custom.deployment.myStage}}
+        DomainValidationOptions:
+          - DomainName: ${self:custom.domain.${self:custom.deployment.myStage}}
+            ValidationDomain: ${self:custom.domain.prod}
+        ValidationMethod: DNS
+    
+    WebsiteDNSRecord:
+      Type: AWS::Route53::RecordSet
+      Properties:
+        AliasTarget:
+          DNSName: !GetAtt WebsiteContentDeliverNetwork.DomainName
+          # Note, when using AliasTarget the ZoneId below must be hardcode to that of CloudFront.
+          # See http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html
+          # for an explanation or just trust that it works. :)
+          HostedZoneId: Z2FDTNDATAQYW2
+        HostedZoneId: !ImportValue ${self:custom.deployment.myStage}HostedZoneId
+        Comment: Alias record to CloudFront distribution
+        Name: ${self:custom.domain.${self:custom.deployment.myStage}}
+        Type: A
+
+  Outputs:
+    WebsiteContentDeliverNetworkId:
+      Description: WebsiteContentDeliverNetwork ID
+      Value: !Ref WebsiteContentDeliverNetwork
+      Export:
+        Name: ${self:custom.deployment.myStage}WebsiteContentDeliverNetwork

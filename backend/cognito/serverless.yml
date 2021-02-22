@@ -1,0 +1,195 @@
+service: app-cognito
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  
+custom:
+  deployment: ${file(config/deployment.yml):deployment}
+
+resources:
+  Resources:
+    # TODO LEKCJA 09-04. Backend: Zarządzanie użytkownikami (Cognito)
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: ${self:service}-${self:custom.deployment.myStage}-user-pool
+        AutoVerifiedAttributes: 
+          - email
+        # AliasAttributes:
+          # Attributes supported as an alias for this user pool. Possible values: 
+          # phone_number, email, or preferred_username.
+          # - email
+        UsernameAttributes: 
+          # Determines whether email addresses or phone numbers can be specified as user names 
+          # when a user signs up. Possible values: phone_number or email.
+          - email
+        VerificationMessageTemplate: # to powoduje ze jest  Verification type link
+          DefaultEmailOption: 'CONFIRM_WITH_LINK'
+        MfaConfiguration: 'OFF'
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+            RequireLowercase: false
+            RequireNumbers: false
+            RequireSymbols: false
+            RequireUppercase: false
+            TemporaryPasswordValidityDays: 7
+    
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: ${self:service}-${self:custom.deployment.myStage}-frontend-client
+        GenerateSecret: false
+        UserPoolId:
+          Ref: CognitoUserPool
+
+# TODO LEKCJA 10-03
+
+    CognitoIdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      DeletionPolicy: Delete
+      Properties:
+        IdentityPoolName: app_cognito_${self:custom.deployment.myStage}_identity_pool
+        AllowUnauthenticatedIdentities: false
+        CognitoIdentityProviders:
+          - ClientId: !Ref CognitoUserPoolClient
+            ProviderName: !GetAtt CognitoUserPool.ProviderName
+
+    CognitoIdentityPoolRoles:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId:
+          Ref: CognitoIdentityPool
+        Roles:
+          authenticated: !GetAtt CognitoAuthRole.Arn
+          unauthenticated: !GetAtt CognitoUnauthRole.Arn
+
+    CognitoAuthRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:custom.deployment.myStage}-auth-role
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: CognitoIdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": authenticated
+        Policies:
+          - PolicyName: "CognitoAuthorizedPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                    - "cognito-identity:*"
+                  Resource: "*"
+                - Effect: "Allow"
+                  Action:
+                    - "execute-api:Invoke"
+                  Resource: 
+                    # "arn:aws:execute-api:region:account-id:api-id/stage/METHOD_HTTP_VERB/Resource-path"
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/GET/products"
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/POST/products/*"
+
+    CognitoUnauthRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:custom.deployment.myStage}-unauth-role
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: CognitoIdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": unauthenticated
+        Policies:
+          - PolicyName: "CognitoUnauthorizedPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                    - "cognito-identity:*"
+                  Resource: "*"
+  
+    CognitoAdminRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:custom.deployment.myStage}-admin-role
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: CognitoIdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": authenticated
+        Policies:
+          - PolicyName: "CognitoAdminPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                    - "cognito-identity:*"
+                  Resource: "*"
+                - Effect: "Allow"
+                  Action:
+                    - "execute-api:Invoke"
+                  
+                  # "arn:aws:execute-api:region:account-id:api-id/stage/METHOD_HTTP_VERB/Resource-path"
+                  Resource: 
+                    - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/*/*"
+  
+    CognitoPoolAdminGroup:
+      Type: AWS::Cognito::UserPoolGroup
+      Properties: 
+        Description: Admin privledges
+        GroupName: admin
+        Precedence: 0
+        RoleArn: !GetAtt CognitoAdminRole.Arn
+        UserPoolId: !Ref CognitoUserPool
+
+  Outputs:
+    Region:
+      Value: ${self:provider.region}
+    UserPoolId:
+      Value: !Ref CognitoUserPool
+    AppClientId:
+      Value: !Ref CognitoUserPoolClient
+    IdentityPoolId:
+      Value: !Ref CognitoIdentityPool

@@ -1,0 +1,177 @@
+service: products
+
+plugins:
+  - serverless-plugin-tracing
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  endpointType: REGIONAL # configuration for API Gateway
+  environment:
+    tableName: ${self:custom.tableName}
+    logLevel: ${self:custom.logLevel.${self:custom.deployment.myStage}}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+custom:
+  tableName: ${self:service}-${self:custom.deployment.myStage}
+  deployment: ${file(config/deployment.yml):deployment}
+  logLevel:
+    dev: 'DEBUG'
+    test: 'INFO'
+    prod: 'WARN'
+
+functions:
+  getAllProducts:
+    handler: src/products/function.getAllProducts
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products
+          method: GET
+
+  createProduct:
+    handler: src/products/function.createProduct
+    tracing: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products
+          method: POST
+          cors: true
+          authorizer: aws_iam
+  
+  createComment:
+    handler: src/comments/function.createComment
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products/{id}
+          method: POST
+          cors: true
+          authorizer: aws_iam
+
+  getProductById:
+    handler: src/products/function.getProductById
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products/{id}
+          method: GET
+
+  getCommentsByProductId:
+    handler: src/comments/function.getCommentsByProductId
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products/{id}/comments
+          method: GET
+          cors: true
+          authorizer: aws_iam
+
+  updateProduct:
+    handler: src/products/function.updateProduct
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products/{id}
+          method: PUT
+          cors: true
+          authorizer: aws_iam
+  
+  deleteProduct:
+    handler: src/products/function.deleteProduct
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+    events:
+      - http:
+          path: products/{id}
+          method: DELETE
+          cors: true
+          authorizer: aws_iam
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: pk # partition key
+            AttributeType: S
+          - AttributeName: sk # secondary key
+            AttributeType: S
+        KeySchema:            # primary key
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+        TableName: ${self:custom.tableName}
+
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

@@ -1,0 +1,130 @@
+service: import-file
+
+plugins:
+  - serverless-plugin-tracing
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
+  profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
+  endpointType: REGIONAL # configuration for API Gateway
+  tracing: true
+  environment:
+    bucketName: ${self:custom.bucketName}
+    queueUrl: !Ref QueueProducts
+    productsApiUrl: ${cf:products-${self:custom.deployment.myStage}.ServiceEndpoint}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:putObject
+        - s3:getObject
+      Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - !GetAtt QueueProducts.Arn
+    - Effect: Allow
+      Action:
+        - sqs:DeleteMessage
+        - sqs:ReceiveMessage
+      Resource: !GetAtt QueueProducts.Arn
+    - Effect: "Allow"
+      Action:
+        - "execute-api:Invoke"
+      Resource: 
+        - "arn:aws:execute-api:${self:provider.region}:*:*/${self:custom.deployment.myStage}/*/*"
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+custom:
+  bucketName: sp-${self:service}-${self:custom.deployment.myStage}-bucket # TODO zmien nazwe bucketa bo musi być unikalna ;-)
+  deployment: ${file(config/deployment.yml):deployment}
+
+functions:
+  signedUrl:
+    handler: src/signedUrl/function.handler
+    events:
+      - http:
+          path: signedUrl
+          method: GET
+          cors: true
+          authorizer: aws_iam
+
+  processFile:
+    handler: src/processFile/function.handler
+    events:
+      - s3:
+          bucket: uploads
+          rules:
+            - suffix: .csv
+
+  save:
+    handler: src/save/function.handler
+    reservedConcurrency: 5
+    events:
+      - sqs:
+          arn: !GetAtt QueueProducts.Arn
+          batchSize: 1
+
+resources:
+  Resources:
+    S3BucketUploads:
+      Type: AWS::S3::Bucket
+      DeletionPolicy: Delete
+      Properties:
+        BucketName: ${self:custom.bucketName}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 300
+    
+    QueueProducts:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:custom.deployment.myStage}-products
+    
+    ProcessFileLambdaPermissionUploadsS3:
+      Type: 'AWS::Lambda::Permission'
+      Properties:
+        FunctionName:
+          'Fn::GetAtt':
+            - ProcessFileLambdaFunction
+            - Arn
+        Principal: 's3.amazonaws.com'
+        Action: 'lambda:InvokeFunction'
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: 'arn:aws:s3:::${self:custom.bucketName}'
+
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
