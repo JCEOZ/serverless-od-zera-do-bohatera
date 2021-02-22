@@ -55,6 +55,9 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [Single Page Application](#single-page-application)
     - [Tydzień 11](#tydzień-11)
       - [Deployment i utrzymanie](#deployment-i-utrzymanie)
+    - [Webinary](#webinary)
+      - [Serverless testing](#serverless-testing)
+      - [Serverless webscraping](#serverless-webscraping)
 
 ## Środowisko na potrzeby kursu
 
@@ -382,3 +385,12 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### Deployment i utrzymanie
 - Link do gałęzi: [Tydzień 11 - Deployment i utrzymanie](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien11-deployment-i-utrzymanie)
 - Opis: kod źródłowy lekcji z tygodnia 11
+
+### Webinary
+#### Serverless testing
+- Link do gałęzi: [Webinar - Serverless testing](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/webinar-serverless-testing)
+- Opis: kod źródłowy z webinaru
+
+#### Serverless webscraping
+- Link do gałęzi: [Webinar - Serverless webscraping](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/webinar-serverless-webscraping)
+- Opis: kod źródłowy z webinaru
