@@ -1,0 +1,84 @@
+service: webinar-testing
+
+frameworkVersion: '<=2.4.0'
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-export-env
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs12.x
+  profile: ${self:custom.deployment.myProfile.${self:custom.myStage}}
+  region: ${self:custom.deployment.myRegion.${self:custom.myStage}}
+  memorySize: 1024
+  environment:
+    STAGE: ${self:custom.myStage}
+    region: ${self:provider.region}
+    service: ${self:service}
+
+custom:
+  myStage: ${opt:stage, self:provider.stage}
+  deployment: ${file(./config/deployment.yml):deployment}
+  tableName: ${self:service}-${self:custom.myStage}
+  cur:
+    bucket:
+      dev: data-lake-cur
+      qa: test_value
+      prod: prod_value
+    database:
+      dev: athenacurcfn_aws_cur_global_athena
+      qa: test_value
+      prod: prod_value
+    table:
+      dev: aws_cur_global_athena
+      qa: test_value
+      prod: prod_value
+    outputLocation:
+      dev: s3://${self:custom.cur.bucket.dev}/queries-from-lambda-dev/
+      qa: s3://${self:custom.cur.bucket.qa}/queries-from-lambda-qa/
+      prod: s3://${self:custom.cur.bucket.prod}/queries-from-lambda-prod/
+
+functions:
+    queryAthena:
+      handler: src/queryAthena/function.handler
+      description: Query Athena and save to DynamoDB
+      timeout: 60
+      environment:
+        athenaDatabase: ${self:custom.cur.database.${self:custom.myStage}}
+        athenaTable: ${self:custom.cur.table.${self:custom.myStage}}
+        athenaOutputLocation: ${self:custom.cur.outputLocation.${self:custom.myStage}}
+        tableName: ${self:custom.tableName}
+
+package:
+  exclude:
+    - __tests__/**
+    - events/**
+    - config/**
+    - documentation
+    - http
+    - '*'
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: PK # partition key
+            AttributeType: S
+          - AttributeName: SK # secondary key
+            AttributeType: S
+        KeySchema:            # primary key
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
+        Tags:
+          - Key: Application
+            Value: ${self:service}
+          - Key: Customer
+            Value: ${self:service}-${self:custom.myStage}
