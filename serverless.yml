@@ -50,6 +50,45 @@ functions:
         athenaTable: ${self:custom.cur.table.${self:custom.myStage}}
         athenaOutputLocation: ${self:custom.cur.outputLocation.${self:custom.myStage}}
         tableName: ${self:custom.tableName}
+      iamRoleStatements:
+        - Sid: AllowAthenaQueries
+          Effect: Allow
+          Action:
+            - athena:StartQueryExecution
+            - athena:GetQueryExecution
+            - athena:GetQueryResults
+          Resource:
+            - arn:aws:athena:${self:provider.region}:*:workgroup/*
+        - Sid: GlueForAthena
+          Effect: Allow
+          Action:
+            - glue:GetTable
+            - glue:GetPartitions
+          Resource:
+            - arn:aws:glue:${self:provider.region}:*:catalog
+            - arn:aws:glue:${self:provider.region}:*:database/${self:custom.cur.database.${self:custom.myStage}}
+            - arn:aws:glue:${self:provider.region}:*:table/${self:custom.cur.database.${self:custom.myStage}}/${self:custom.cur.table.${self:custom.myStage}}
+        - Sid: S3ForAthena
+          Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:PutObjectAcl
+            - s3:PutLifecycleConfiguration
+            - s3:GetObject
+            - s3:ListBucket
+            - s3:GetBucketLocation
+            - s3:GetObjectVersion
+          Resource:
+            - !Sub arn:${AWS::Partition}:s3:::${self:custom.cur.bucket.${self:custom.myStage}}
+            - !Sub arn:${AWS::Partition}:s3:::${self:custom.cur.bucket.${self:custom.myStage}}/*
+        # TODO uncomment after executing test: npm run int queryAthena-BillingItemS 
+        # - Sid: DynamoDbReadWrite
+        #   Effect: Allow
+        #   Action:
+        #     - dynamodb:PutItem
+        #     - dynamodb:GetItem
+        #   Resource: 
+        #     - !GetAtt DynamoDbTable.Arn
 
 package:
   exclude:
