@@ -56,6 +56,18 @@ functions:
           startingPosition: LATEST
           arn: !GetAtt DynamoDbTable.StreamArn
 
+  postToSlack:
+    handler: src/postToSlack/function.handler
+    description: Send message to slack channel
+    memorySize: 128
+    timeout: 3
+    environment:
+      slackUrl: ${ssm:slack-url}
+    events:
+      - sns:
+          arn: !Ref snsTopic
+          topicName: ${self:custom.topicName}
+
 resources:
   Resources:
     DynamoDbTable:
