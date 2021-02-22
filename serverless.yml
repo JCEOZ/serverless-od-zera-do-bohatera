@@ -5,9 +5,16 @@ provider:
   runtime: nodejs12.x
   region: ${self:custom.deployment.myRegion.${self:custom.deployment.myStage}}
   profile: ${self:custom.deployment.myProfile.${self:custom.deployment.myStage}}
-  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Scan
+      Resource:
+        - !GetAtt DynamoDbTable.Arn
 custom:
   deployment: ${file(config/deployment.yml):deployment}
+  tableName: ${self:service}-${self:custom.deployment.myStage}
 
 functions:
 
@@ -18,5 +25,26 @@ functions:
     memorySize: 1600
     layers:
       - arn:aws:lambda:eu-central-1:764866452798:layer:chrome-aws-lambda:10
+    environment:
+      tableName: ${self:custom.tableName}
     events:
       - schedule: cron(0 */4 * * ? *)
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: url
+            AttributeType: S
+        KeySchema:
+          - AttributeName: url
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
+        Tags:
+          - Key: Application
+            Value: ${self:service}
