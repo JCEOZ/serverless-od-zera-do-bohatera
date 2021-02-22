@@ -1,9 +1,11 @@
+const AthenaAdapter = require('../adapters/AthenaAdapter')
+
 const log = require('../log')(__filename)
 
 module.exports = class AwsCostsService {
-  constructor(athenaAdapter, getRemainingTimeInMillis) {
-    this.athenaAdapter = athenaAdapter
+  constructor(getRemainingTimeInMillis, athenaAdapter) {
     this.getRemainingTimeInMillis = getRemainingTimeInMillis
+    this.athenaAdapter = athenaAdapter || new AthenaAdapter()
   }
 
   async getTopTenMostExpensiveAwsServices() {

@@ -30,7 +30,7 @@ describe('Aws Costs Service Unit Test', () => {
     // GIVEN
     const getRemainingTimeInMillis = () => 29000
     const adapter = new AthenaAdapterMock()
-    const service = new AwsCostsService(adapter, getRemainingTimeInMillis)
+    const service = new AwsCostsService(getRemainingTimeInMillis, adapter)
 
     // WHEN
     const actual = await service.getTopTenMostExpensiveAwsServices()
@@ -50,7 +50,7 @@ describe('Aws Costs Service Unit Test', () => {
       query: (sqlQuery, ctxRemainingTime) => ({ Rows: [...ROWS] })
     }))
     const adapter = new AthenaAdapter()
-    const service = new AwsCostsService(adapter, getRemainingTimeInMillis)
+    const service = new AwsCostsService(getRemainingTimeInMillis, adapter)
 
     // WHEN
     const actual = await service.getTopTenMostExpensiveAwsServices()

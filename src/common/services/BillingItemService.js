@@ -13,6 +13,7 @@ module.exports = class BillingItemService {
    * @param {Number} payload.cost
    */
   async createBillingItem(payload) {
+    log(`Creating Billing Item ${payload.name} with cost ${payload.cost}`)
     const item = new BillingItem(payload)
     const params = {
       Item: item.toItem(),

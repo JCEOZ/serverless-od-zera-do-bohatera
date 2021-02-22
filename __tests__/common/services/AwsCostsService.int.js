@@ -2,7 +2,6 @@
  * @jest-environment node
  */
 
-const AthenaAdapter = require('../../../src/common/adapters/AthenaAdapter')
 const AwsCostsService = require('../../../src/common/services/AwsCostsService')
 
 const timeout = 50000
@@ -11,12 +10,10 @@ describe('Aws Costs Service', () => {
   it('should get Top 10 Most Expensive Aws Services from Athena Data Lake', async () => {
     // GIVEN
     const getRemainingTimeInMillis = () => 29000
-    const athenaAdapter = new AthenaAdapter()
-    const service = new AwsCostsService(athenaAdapter, getRemainingTimeInMillis)
+    const service = new AwsCostsService(getRemainingTimeInMillis)
 
     // WHEN
     const actual = await service.getTopTenMostExpensiveAwsServices()
-    // console.log(actual); // TODO pokaz to
 
     // THEN
     expect(actual).toBeTruthy()
