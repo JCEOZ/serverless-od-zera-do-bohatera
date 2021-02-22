@@ -53,6 +53,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
       - [REST VPC](#rest-vpc)
     - [Tydzień 9/10](#tydzień-910)
       - [Single Page Application](#single-page-application)
+    - [Tydzień 11](#tydzień-11)
+      - [Deployment i utrzymanie](#deployment-i-utrzymanie)
 
 ## Środowisko na potrzeby kursu
 
@@ -375,3 +377,8 @@ Repozytorium dla kursu [Serverless - od zera do bohatera](https://akademia.serve
 #### Single Page Application
 - Link do gałęzi: [Tydzień 9 - Single Page Application](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien9-single-page-application)
 - Opis: Projekt Single Page Application
+
+### Tydzień 11
+#### Deployment i utrzymanie
+- Link do gałęzi: [Tydzień 11 - Deployment i utrzymanie](https://github.com/JCEOZ/serverless-od-zera-do-bohatera/tree/tydzien11-deployment-i-utrzymanie)
+- Opis: kod źródłowy lekcji z tygodnia 11
