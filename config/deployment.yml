@@ -1,0 +1,9 @@
+deployment:
+  myProfile:
+    dev: pawel
+    qa: pawel
+    prod: pawel
+  myRegion:
+    dev: eu-west-1
+    qa: eu-west-1
+    prod: eu-west-1
